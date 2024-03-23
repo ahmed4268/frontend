@@ -1,25 +1,26 @@
-import logo from './logo.svg';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
+import Operation from "./Routes/operation/operation.component";
+import Newoperation from "./Routes/Newoperation/Newoperation";
+import Dachboard from "./Routes/dachbord/dashbord";
+import Archive from "./Routes/Archive/Archive";
 
-function App() {
+const App=() => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+
+          <Routes>
+
+              <Route index element={<Dachboard />} />
+              <Route path="/archive" element={<Archive />} />
+             <Route path="/operation" element={<Operation />} />
+              <Route path="/new-operation" element={<Newoperation/>} />
+          </Routes>
+
+
+
+
   );
-}
+};
 
 export default App;
