@@ -68,7 +68,7 @@ const App = () => {
     return (
         <Layout  >
 
-<Navbar/>
+          <Navbar/>
             <Layout
                 style={{
 

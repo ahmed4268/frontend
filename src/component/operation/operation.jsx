@@ -13,13 +13,16 @@ import {
 
 
 } from '@ant-design/icons';
+import EditForm from "../editoperation/editopperation";
 import Highlighter from 'react-highlight-words';
 import {Space, Tooltip, Col, Divider, Drawer, Row, Popconfirm, Input, Button, Tag, Table, message, ConfigProvider} from 'antd';
 import './operation.scss'
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 const Tablee =  (props) => {
-    // const [isEditing, setIsEditing] = useState(false);
+    const navigate = useNavigate();// const [isEditing, setIsEditing] = useState(false);
     const [view, setview] = useState(null);
+    const [operationToEdit, setOperationToEdit] = useState(null);
     const DescriptionItem = ({title, content}) => (
         <div className="site-description-item-profile-wrapper">
             <p className="site-description-item-profile-p-label">{title}:</p>
@@ -47,17 +50,26 @@ const [data, setData] = useState([])
                         name: operation.name,
                         AccessCode: operation.accessCode,
                         site: operation.site.name,
+                        sitee: operation.site,
                         Technician: operation.technicians.map(technician => technician.Fullname).join(', '),
-                        'Start_Date': operation.startTime.slice(0, 10),
+                        Technician_e: operation.technicians.map(technician =>technician._id),
+                        Technician_ee: operation.technicians.map(technician => {
+                            return { ...technician, key: technician._id };    }),                    'Start_Date': operation.startTime.slice(0, 10),
+                        startTime: operation.startTime,
                         End_Date: operation.endTime.slice(0, 10),
+                        endTime: operation.endTime,
                         status: operation.status,
+                        Date:[operation.startTime, operation.endTime],
                         responsable: operation.responsable.Fullname,
+                        responsablee: operation.responsable,
                         Driver: operation.driver.Fullname,
+                        Drivere: operation.driver,
                         Marche: operation.Marche,
                         responsable_phone: operation.responsable.phoneNumber,
                         Description: operation.Description,
                         Adress: `${operation.site.address}, ${operation.site.state}, ${operation.site.city}`,
                         vehicle: `${operation.vehicle.brand} ${operation.vehicle.model},${operation.vehicle.seats}-seats`,
+                        vehiclee: operation.vehicle,
                         license_plate: operation.vehicle.licensePlate,
                         confirm:operation.status==="Planned"
                     };
@@ -70,6 +82,19 @@ const [data, setData] = useState([])
         };
         fetchOperations();
     }, [props.operation]);
+    const handleedit = (key) => {
+        // Find the operation with the given key
+        const operation = data.find(operation => operation.key === key);
+        if (!operation) {
+            console.error(`No operation found with key: ${key}`);
+            return;
+        }
+        navigate('/editoperation', { state: { operation: operation } });
+
+
+
+    };
+    console.log(operationToEdit);
     const handleDelete = async (key) => {
         await axios.delete(`/operation/${key}`)
         const newData = data.filter((item) => item.key !== key);
@@ -193,13 +218,14 @@ const [data, setData] = useState([])
             title: 'AccessCode',
             dataIndex: 'AccessCode',
             width: "10%",
+            responsive: ['md'],
             ...getColumnSearchProps('AccessCode'),
         },
         {
             title: 'Site',
             dataIndex: 'site',
             width: 180,
-
+            responsive: ['md'],
             ...getColumnSearchProps('site'),
 
         },
@@ -207,7 +233,7 @@ const [data, setData] = useState([])
             title: 'Technician',
             dataIndex: 'Technician',
             width: 180,
-
+            responsive: ['md'],
             ...getColumnSearchProps('Technician'),
 
 
@@ -216,6 +242,7 @@ const [data, setData] = useState([])
             title: 'Start Date',
             dataIndex: 'Start_Date',
             width: "15%",
+            responsive: ['md'],
             sorter: (date1, date2) => {
                 // Convert date strings to Date objects
                 const firstDate = new Date(date1.Start_Date);
@@ -233,6 +260,7 @@ const [data, setData] = useState([])
             title: 'End Date',
             dataIndex: 'End_Date',
             width: "15%",
+            responsive: ['md'],
         },
 
 
@@ -289,6 +317,7 @@ const [data, setData] = useState([])
         {
             title: 'Actions',
             width: "1%",
+            // responsive: ['md'],
             render: (_,record) => {
 
                 return(
@@ -303,7 +332,9 @@ const [data, setData] = useState([])
                         <div hidden={props.archive}>
                             <Space size="middle">
                                 <Tooltip title="Edit" >
-                                    <Button   icon={<EditTwoTone twoToneColor="#7070a9"/>}/>
+                                    <Button   icon={<EditTwoTone twoToneColor="#7070a9"/>} onClick={() =>
+                                        handleedit(record.key)}
+                                    />
                                 </Tooltip>
                                 <Tooltip title="Delete">
                                     <Popconfirm
@@ -446,6 +477,7 @@ const [data, setData] = useState([])
                 </Row>
             </Drawer>
 
+            {/*{operationToEdit && <EditForm operation={operationToEdit} />}*/}
 
 
             <Table bordered columns={columns} loading={spinning} dataSource={data}  onChange={onChange} size="large"/>

@@ -34,7 +34,7 @@ const Sidebar = (props) => {
             </a>,
             'sub1', <ProductOutlined />),
         {type: 'divider'},
-        getItem(<a href=""  rel="noopener noreferrer">
+        getItem(<a href="/tracking"  rel="noopener noreferrer">
             Tracking
         </a>, 'sub2', <NodeIndexOutlined />),
         {type: 'divider'},
@@ -55,11 +55,13 @@ const Sidebar = (props) => {
                style={{
                    // background: colorBgContainer,
                    minHeight:"0vh",
-                   margin:"8px",
+                   margin:"7px",
+                   marginTop:"45px",
                    borderRadius: borderRadiusLG,
                }}
         >
             <Menu
+
                 theme="dark"
                 mode="inline"
                 iconSize='78'
@@ -67,7 +69,8 @@ const Sidebar = (props) => {
                 defaultSelectedKeys={['']}
                 defaultOpenKeys={['sub1']}
                 style={{
-
+                    borderRadius: borderRadiusLG,
+                    height: '80vh',
                     marginTop: '40px',
                     borderRight: 0,
 
