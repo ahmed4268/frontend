@@ -75,7 +75,7 @@ function Profile() {
             email: values.email,
         };
         try {
-            const response = await axios.patch('user/updateMe', updatedValues, {
+            const response = await axios.patch('https://opti-track-1.onrender.com/user/updateMe', updatedValues, {
                 headers: {
                     'Authorization': `Bearer ${Cookies.get('token')}`,
                 }
