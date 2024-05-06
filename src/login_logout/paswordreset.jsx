@@ -15,7 +15,7 @@ function ResetPassword() {
 
     const handleSubmit = async ({ password }) => {
         try {
-            const response = await axios.patch('/user/resetPassword/' + token, { password });
+            const response = await axios.patch('https://opti-track-1.onrender.com/user/resetPassword/' + token, { password });
 
             if (response.status === 200) {
                 message.success('Password has been reset');
