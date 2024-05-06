@@ -1,0 +1,201 @@
+/* Style the map container */
+
+.map-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+}
+
+
+/* Style the sidebar */
+
+.sidebar {
+    position: absolute;
+    top: 100px;
+    left: 0;
+    width: 30px;
+    /* Adjust width as needed */
+    height: 80%;
+    /* Example background color */
+    z-index: 100;
+    /* Ensure sidebar is above map */
+}
+.replay{
+
+    margin: 10px;
+}
+.sub{
+    margin: 10px;
+    margin-left: 295px;
+    background-color: #015ab4;
+}
+.title1{
+    border: 2px solid #eae8e8;
+    margin: 10px;
+    .h31{
+        margin: 5px;
+    }
+
+}
+.replaycontainer{
+    border: 2px solid #eae8e8;
+    margin: 1px;
+}
+.text{
+    margin: 10px;
+}
+.radiogroup{
+    margin: 10px;
+}
+.date{
+    margin: 10px;
+}
+.location1{
+    background-color: #015ab4;
+    margin: 15px;
+    margin-left: 60px;
+
+}
+.panel2 {
+    position: absolute;
+    top: 146px;
+    left: 100px;
+    width: 400px;
+    /* Adjust width as needed */
+    height: 60%;
+    border-radius: 4%;
+    z-index: 100;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 80%;
+    background-color: #ffffff;
+    .h3 {
+        color: #000000;
+        font-style: normal;
+        font-size: 19px;
+        margin-left: 5px;
+        position: sticky;
+        top: 0;
+        padding: 8px;
+        background-color: #ffffff;
+        /* Add a background color to prevent text underneath from showing */
+        z-index: 2;
+
+    }
+    /* Ensure sidebar is above map */
+}
+
+.speed {
+    border-radius: 5px;
+    border: 0.1px solid #eae8e8 !important;
+    width: auto;
+    padding: 5px;
+    margin: 10px 10px 10px 10px;
+}
+
+.timeline {
+    border-radius: 5px;
+    border: 0.1px solid #f8f5f5 !important;
+    width: auto;
+    padding: 5px;
+    margin: 10px 10px 10px 10px;
+}
+
+#style-8::-webkit-scrollbar-track {
+    border: 1px solid black;
+    background-color: #F5F5F5;
+}
+
+#style-8::-webkit-scrollbar {
+    width: 10px;
+    background-color: #F5F5F5;
+}
+
+#style-8::-webkit-scrollbar-thumb {
+    background-color: #000000;
+}
+
+.panel-2 {
+    position: absolute;
+    top: 146px;
+    right: 45px;
+    width: 300px;
+    /* Adjust width as needed */
+    height: auto;
+    min-height: 50%;
+    border-radius: 3%;
+    z-index: 100;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 80%;
+    background-color: #ffffff;
+    .h3 {
+        color: #000000;
+        font-style: normal;
+        font-size: 19px;
+        margin-left: 5px;
+        margin-top: 30px;
+        position: sticky;
+        top: 0;
+        padding: 8px;
+        background-color: #ffffff;
+        /* Add a background color to prevent text underneath from showing */
+        z-index: 2;
+
+    }
+    .h4 {
+        color: #090707;
+        font-family: 'Roboto', sans-serif;
+        font-size: 18px;
+        margin: 5px;
+        top: 0;
+    }
+    .close-button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: none;
+        border: none;
+        font-size: 20px;
+        padding: 10px;
+        cursor: pointer;
+    }
+    .h5 {
+        color: #2c9432;
+        font-style: normal;
+        font-size: 16px;
+        margin: 5px;
+        top: 0;
+    }
+    /* Ensure sidebar is above map */
+}
+
+
+/* Style the navbar */
+
+.navbar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 1%;
+    /* Adjust height as needed */
+    /* Example background color */
+    z-index: 100;
+    /* Ensure navbar is above map */
+}
+
+.scrollable-menu {
+    /* Adjust this value as needed */
+    overflow-y: auto;
+}
+
+
+/* Style the map */
+
+.map {
+    width: 100%;
+    height: 100vh;
+    z-index: 1;
+    /* Ensure map is below sidebar and navbar */
+}
