@@ -6,7 +6,7 @@ import {
     Select, Table,
     Tag
 } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {
     CarOutlined, CheckCircleOutlined,
     ContainerOutlined
@@ -21,26 +21,43 @@ import axios from "axios";
 import Sidebar from "../../component/sidebar/sidebar"
 import Footerr from "../../component/footer/footer"
 import Navbar from "../../component/navbar/navbar"
+import moment from 'moment-timezone';
 import Highlighter from 'react-highlight-words';
+import dayjs from "dayjs";
 import Cookies from "js-cookie";
 const {  Content } = Layout;
-const {RangePicker} = DatePicker;
-const {TextArea} = Input;
+
 
 
 const App = () => {
-    const [generalinfo, setGeneralinfo] = useState(null);
-    const [techinfo, setTechinfo] = useState({});
-    const [vehinfo, setvehinfo] = useState(null);
-    const [technicians, setTechnicians] = useState([]);
+    const location = useLocation();
+    const operationn = location.state.operation;
+    const moment = require('moment');
+const date1=dayjs(operationn.startTime)
+const date2=dayjs(operationn.endTime)
+    const [generalinfo, setGeneralinfo] = useState({
+        name:operationn.name,
+        accessCode: operationn.AccessCode,
+        Marché: operationn.Marche,
+        Site: operationn.sitee._id,
+        Date:[date1,date2],
+        Description: operationn.Description
+    });
+
+    const [techinfo, setTechinfo] = useState({responsable:operationn.responsablee._id,
+        driver: operationn.Drivere._id,
+        techniciens:operationn.Technician_e
+    });
+    const [vehinfo, setvehinfo] = useState( {vehicule: operationn.vehiclee._id});
+    const [technicians, setTechnicians] = useState(operationn.Technician_ee?operationn.Technician_ee:[]);
     const [tech, settech] = useState([]);
     const [veh, setveh] = useState([]);
     const [Site, setSite] = useState([]);
     const [data, setData] = useState([]);
     const [dataa, setDataa] = useState([]);
     const [submitting, setSubmitting] = useState(false);
-    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-    const [selectedRowKeyss, setSelectedRowKeyss] = useState();
+    const [selectedRowKeys, setSelectedRowKeys] = useState(operationn.Technician_e);
+    const [selectedRowKeyss, setSelectedRowKeyss] = useState(operationn.vehiclee._id);
     const [current, setCurrent] = useState(0);
     const navigate = useNavigate();
     const next = () => {
@@ -49,36 +66,32 @@ const App = () => {
     const onFinishGeneral = (values) => {
         setGeneralinfo(values);
         setSubmitting(true);
-
     }
-
     const onFinishtech = (values) => {
         setTechinfo(values);
         setTechinfo(prevState => ({
             ...prevState,
             techniciens: selectedRowKeys,
         }));
-console.log("techinfo",techinfo)
+
         setSubmitting(true);
     }
     const onFinishveh = (values) => {
-        console.log("values",values);
+        console.log(selectedRowKeyss)
         if (selectedRowKeyss.length === 0) {
             message.error('Please select a vehicle');
             return;
         }
         setvehinfo(values);
+
         setvehinfo(prevState => ({
             ...prevState,
             vehicule: selectedRowKeyss,
 
         }));
-        console.log("vehinfo",vehinfo)
-
         setSubmitting(true);
     }
     const getDatesBetween = (startDate, endDate) => {
-        console.log(startDate, endDate)
         let datesArray = [];
         let currentDate = startDate;
 
@@ -86,27 +99,25 @@ console.log("techinfo",techinfo)
             datesArray.push(currentDate.format('YYYY-MM-DD'));
             currentDate = currentDate.add(1, 'days');
         }
-       console.log(datesArray)
         return datesArray;
     };
     const gettechnumb = () => {
-        // Check if techinfo.techniciens is defined and is an array
-        if (techinfo.techniciens && Array.isArray(techinfo.techniciens)) {
-            return techinfo.techniciens.length;
-        }
-        return 0; // Return 0 if techinfo.techniciens is not defined or not an array
+        if (techinfo.techniciens)
+        return (techinfo.techniciens.length)
     }
     useEffect(() => {
         if (!generalinfo) {
             return;
+
         }
         const requestData = {
-                operationDays: getDatesBetween(generalinfo.Date[0], generalinfo.Date[1])
-            }
+             operationDays: getDatesBetween(generalinfo.Date[0], generalinfo.Date[1]),
+            operation_id: operationn.key
+        }
 
         const fetchtech = async () => {
 
-            const {data} = await axios.post('tech/availabletech', requestData,{
+            const {data} = await axios.post('tech/availabletech_update', requestData,{
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },
@@ -119,22 +130,48 @@ console.log("techinfo",techinfo)
 
     }, [generalinfo]);
     useEffect(() => {
+        const fetchtechs = async () => {
+            try {
+                const newData = await Promise.all(tech.map(async (tech) => {
+                    return {
+                        key: tech._id,
+                        firstName: tech.firstName,
+                        lastName: tech.lastName,
+                        Email: tech.Email,
+                        phoneNumber: tech.phoneNumber,
+                        specialization: tech.specialization,
+                        Permis: tech.Permis,
+                        Fullname: tech.Fullname
+                    };
+                }));
+                setData(newData);
+            } catch (error) {
+                console.error(error);
+
+            }
+        };
+        fetchtechs();
+    }, [tech]);
+    useEffect(() => {
         if (!generalinfo) {
             return;
         }
-        console.log(generalinfo.Date[0])
-        const driver = technicians.find(tech => tech.key === techinfo.driver);
+console.log(tech)
+        const driver = tech.find(tech => tech.id === techinfo.driver);
+
         const driverPermis = driver ? driver.Permis : null;
+        console.log(driver)
         const requestDataa = {
 
-                operationDays: getDatesBetween(generalinfo.Date[0], generalinfo.Date[1]),
-                technumber:gettechnumb(),
-                Permis: driverPermis
-            }
+             operationDays: getDatesBetween(generalinfo.Date[0], generalinfo.Date[1]),
+            technumber:gettechnumb(),
+            Permis: driverPermis,
+            operation_id: operationn.key
+        }
 
 
         const fetchveh = async () => {
-            const {data} = await axios.post('vehicule/availableveh', requestDataa,{
+            const {data} = await axios.post('vehicule/availableveh_update', requestDataa,{
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },
@@ -171,6 +208,7 @@ console.log("techinfo",techinfo)
         };
         fetchSites();
 
+
     }, [generalinfo, techinfo, vehinfo, submitting]);
 
 
@@ -178,6 +216,7 @@ console.log("techinfo",techinfo)
         value: site._id,
         label: `${site.name}(${site.state},${site.city})`,
     }));
+
     const steps = [
         {
             title: 'General',
@@ -197,33 +236,11 @@ console.log("techinfo",techinfo)
         },
     ];
 
+    const {RangePicker} = DatePicker;
+    const {TextArea} = Input;
 
 
-    const user = JSON.parse(localStorage.getItem('user'));
 
-    useEffect(() => {
-        const fetchtechs = async () => {
-            try {
-                const newData = await Promise.all(tech.map(async (tech) => {
-                    return {
-                        key: tech._id,
-                        firstName: tech.firstName,
-                        lastName: tech.lastName,
-                        Email: tech.Email,
-                        phoneNumber: tech.phoneNumber,
-                        specialization: tech.specialization,
-                        Permis: tech.Permis,
-                        Fullname: tech.Fullname
-                    };
-                }));
-                setData(newData);
-            } catch (error) {
-                console.error(error);
-
-            }
-        };
-        fetchtechs();
-    }, [tech]);
     useEffect(() => {
         const fetchvehs = async () => {
             try {
@@ -340,6 +357,7 @@ console.log("techinfo",techinfo)
             dataIndex: 'firstName',
             width: 180,
             ...getColumnSearchProps('firstName'),
+
         },
         {
             title: 'lastName',
@@ -377,7 +395,7 @@ console.log("techinfo",techinfo)
             title: 'Permis',
             dataIndex: 'Permis',
             key: 'Permis',
-            // width: 180,
+            width: '5%',
             render: (Permis) => {
                 let color;
                 switch (Permis) {
@@ -512,21 +530,20 @@ console.log("techinfo",techinfo)
         }
     };
     const onSelectChangee = (record) => {
+        console.log(record)
         setSelectedRowKeyss(record.key);
-        console.log("selectedRowKeyss=",selectedRowKeyss)
 
     };
 
-        const rowSelection = {
-            selectedRowKeys,
-            onChange: onSelectChange,
-            };
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: onSelectChange,
+    };
     const rowSelectionn = {
-         type: 'radio',
         selectedRowKeyss,
         onSelect: onSelectChangee,
     };
-        const optionss=technicians.map((technician) => ({
+    const optionss=technicians.map((technician) => ({
         value: technician.key,
         label: technician.Fullname,
     }));
@@ -537,13 +554,13 @@ console.log("techinfo",techinfo)
             {content}
         </div>)
 
-    async function createOperation() {
+    function EditOperation() {
         const operation = {
             name: generalinfo.name,
             accessCode: generalinfo.accessCode,
             Marche: generalinfo.Marché,
             site: generalinfo.Site,
-            operationDays: getDatesBetween(generalinfo.Date[0], generalinfo.Date[1]),
+            operationDays: (generalinfo.Date[0]===moment(operationn.startTime)?getDatesBetween(operationn.startTime, operationn.endTime):getDatesBetween(generalinfo.Date[0], generalinfo.Date[1])),
             startTime: generalinfo.Date[0],
             endTime: generalinfo.Date[1],
             Description: generalinfo.Description,
@@ -551,21 +568,19 @@ console.log("techinfo",techinfo)
             driver: techinfo.driver,
             technicians: techinfo.techniciens,
             vehicle: vehinfo.vehicule,
-            user: user._id,
         };
-message.loading('Creating operation...', 3)
-        await axios.post('operation', operation, {
+        message.loading('updating operation...', 3)
+
+        axios.patch(`operation/op/${operationn.key}`, operation,{
             headers: {
                 Authorization: `Bearer ${Cookies.get('token')}`,
             },
         })
             .then((response) => {
-                message.success('Operation created successfully');
+                message.success('Operation updated successfully');
                 navigate('/');
             })
-            .catch((error) => {
-                message.error('An error occurred');
-            });
+
     }
 
     function Confirmation() {
@@ -585,181 +600,181 @@ message.loading('Creating operation...', 3)
         const technicianNames = operation.technicians.map(name => name).join(', ');
         return (
             <div>
-            <p
-                className="site-description-item-profile-p"
-                style={{
-                    marginBottom: 15,
-                }}
-            >
-                <h3>Operation Details</h3>
-            </p>
-
-        <Row>
-            <Col span={13} >
-                <DescriptionItem title=" Name" content={operation.name}/>
-            </Col>
-            <Col >
-                <DescriptionItem title="AccessCode" content={operation.accessCode}/>
-            </Col>
-        </Row>
-        <Row>
-            <Col span={12}>
-                <DescriptionItem title="Marche" content={operation.Marche}/>
-            </Col>
-
-        </Row>
-        <Row>
-            <Col span={13}>
-                <DescriptionItem title="Start Date" content={operation.startTime.format('YYYY-MM-DD HH:mm')}/>
-            </Col>
-            <Col >
-                <DescriptionItem title="End Date" content={operation.endTime.format('YYYY-MM-DD HH:mm')}/>
-            </Col>
-        </Row>
-        <Row>
-            <Col span={12}>
-                <DescriptionItem title="Site" content={operation.site}/>
-            </Col>
-
-        </Row>
-        <Row>
-            <Col span={24}>
-                <DescriptionItem
-                    title="Description"
-                    content={operation.Description}
-                />
-            </Col>
-        </Row>
-        <Divider/>
-        <p className="site-description-item-profile-p"><h3>Members</h3></p>
-        <Row>
-            <Col >
-                <DescriptionItem title="Technician" content={technicianNames}/>
-            </Col>
-        </Row>
-        <Row>
-            <Col span={19}>
-                <DescriptionItem title="Responsable" content={operation.responsable}/>
-            </Col>
-            <Col span={12}>
-                <DescriptionItem title="Driver" content={operation.Driver}/>
-            </Col>
-
-        </Row>
-
-
-
-        <Divider/>
-        <p className="site-description-item-profile-p"><h3>Vehicle</h3></p>
-        <Row>
-            <Col span={12}>
-                <DescriptionItem title="licencePlate" content={operation.vehicle}/>
-            </Col>
-
-        </Row>
-            <Flex  justify="space-around" >
-                {current > 0 && (
-                    <Button
-                        curee       style={{
-                        margin: '0 8px',
+                <p
+                    className="site-description-item-profile-p"
+                    style={{
+                        marginBottom: 15,
                     }}
-                        onClick={() => prev()}
-                    >
-                        Previous
-                    </Button>
-                )}
+                >
+                    <h3>Operation Details</h3>
+                </p>
 
-                {current < steps.length - 1 && (
-                    <Button type="primary" htmlType="submit">
-                        Next
-                    </Button>
-                )}
-                {current === steps.length - 1 && (
-                    <Button type="primary" onClick={createOperation}>
-                        Done
-                    </Button>
-                )}
-            </Flex>
+                <Row>
+                    <Col span={13} >
+                        <DescriptionItem title=" Name" content={operation.name}/>
+                    </Col>
+                    <Col >
+                        <DescriptionItem title="AccessCode" content={operation.accessCode}/>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <DescriptionItem title="Marche" content={operation.Marche}/>
+                    </Col>
+
+                </Row>
+                <Row>
+                    <Col span={13}>
+                        <DescriptionItem title="Start Date" content={operation.startTime.format('YYYY-MM-DD HH:mm')}/>
+                    </Col>
+                    <Col >
+                        <DescriptionItem title="End Date" content={operation.endTime.format('YYYY-MM-DD HH:mm')}/>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <DescriptionItem title="Site" content={operation.site}/>
+                    </Col>
+
+                </Row>
+                <Row>
+                    <Col span={24}>
+                        <DescriptionItem
+                            title="Description"
+                            content={operation.Description}
+                        />
+                    </Col>
+                </Row>
+                <Divider/>
+                <p className="site-description-item-profile-p"><h3>Members</h3></p>
+                <Row>
+                    <Col >
+                        <DescriptionItem title="Technician" content={technicianNames}/>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={19}>
+                        <DescriptionItem title="Responsable" content={operation.responsable}/>
+                    </Col>
+                    <Col span={12}>
+                        <DescriptionItem title="Driver" content={operation.Driver}/>
+                    </Col>
+
+                </Row>
+
+
+
+                <Divider/>
+                <p className="site-description-item-profile-p"><h3>Vehicle</h3></p>
+                <Row>
+                    <Col span={12}>
+                        <DescriptionItem title="licencePlate" content={operation.vehicle}/>
+                    </Col>
+
+                </Row>
+                <Flex  justify="space-around" >
+                    {current > 0 && (
+                        <Button
+                            curee       style={{
+                            margin: '0 8px',
+                        }}
+                            onClick={() => prev()}
+                        >
+                            Previous
+                        </Button>
+                    )}
+
+                    {current < steps.length - 1 && (
+                        <Button type="primary" htmlType="submit">
+                            Next
+                        </Button>
+                    )}
+                    {current === steps.length - 1 && (
+                        <Button type="primary" onClick={EditOperation}>
+                            Done
+                        </Button>
+                    )}
+                </Flex>
             </div>
         ) ;
     }
-const GeneralForm= ({onFinish,initialvalue}) => {
+    const GeneralForm= ({onFinish,initialvalue}) => {
 
-    return (
-        <Form onFinish={onFinish}
-              initialValues={initialvalue}
-            size="large"
-            labelCol={{
-                span: 5,
-            }}
-            wrapperCol={{
-                span: 16,
-            }}
-            layout="horizontal"
-            style={{
-                maxWidth: 600,
-            }}
-        >
-            <Form.Item  hasFeedback
-                        label="Name"
-                        name="name"
-                        validateTrigger="onBlur"
-                        rules={[
-                            {
-                                required: true,
-                            },
-                            {
-                                type: 'string',
-                                min: 6,
-                            },
-                        ]}>
-                <Input />
-            </Form.Item>
-            <Form.Item  hasFeedback name="accessCode" label="AcessCode" rules={[
-                {
-                    required: true,
-                },
-                {
-                    type: 'string',
-                    min: 4,
-                },
-            ]}>
-                <Input />
-            </Form.Item>
-            <Form.Item hasFeedback name="Marché" label="Marché" rules={[
-                {
-                    required: true,
-                },
-                {
-                    type: 'string',
-                    min: 6,
-                },
-            ]}>
-                <Input />
-            </Form.Item>
-            <Form.Item label="Site" name="Site" rules={[
-                {
-                    required: true,
-                },
-            ]}>
-
-                <Select hasFeedback showSearch  placeholder="Search to Select"
-                        optionFilterProp="children"
-                        filterOption={(input, option) => (option?.label ?? '').includes(input)}
-                        filterSort={(optionA, optionB) =>
-                            (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())} options={options} />
-
-            </Form.Item>
-
-            <Form.Item hasFeedback name="Date" label="Date" rules={[
-                {
-                    required: true,
-                },
-            ]} >
-                <RangePicker showTime format="YYYY-MM-DD HH:mm" />
+        return (
+            <Form onFinish={onFinish}
+                  initialValues={initialvalue}
+                  size="large"
+                  labelCol={{
+                      span: 5,
+                  }}
+                  wrapperCol={{
+                      span: 16,
+                  }}
+                  layout="horizontal"
+                  style={{
+                      maxWidth: 600,
+                  }}
+            >
+                <Form.Item  hasFeedback
+                            label="Name"
+                            name="name"
+                            validateTrigger="onBlur"
+                            rules={[
+                                {
+                                    required: true,
+                                },
+                                {
+                                    type: 'string',
+                                    min: 6,
+                                },
+                            ]}>
+                    <Input />
                 </Form.Item>
-               <Form.Item hasFeedback name="Description" label="Description">
-                <TextArea rows={4} />
+                <Form.Item  hasFeedback name="accessCode" label="AcessCode" rules={[
+                    {
+                        required: true,
+                    },
+                    {
+                        type: 'string',
+                        min: 4,
+                    },
+                ]}>
+                    <Input />
+                </Form.Item>
+                <Form.Item hasFeedback name="Marché" label="Marché" rules={[
+                    {
+                        required: true,
+                    },
+                    {
+                        type: 'string',
+                        min: 6,
+                    },
+                ]}>
+                    <Input />
+                </Form.Item>
+                <Form.Item label="Site" name="Site" rules={[
+                    {
+                        required: true,
+                    },
+                ]}>
+
+                    <Select hasFeedback showSearch  placeholder="Search to Select"
+                            optionFilterProp="children"
+                            filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                            filterSort={(optionA, optionB) =>
+                                (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())} options={options} />
+
+                </Form.Item>
+
+                <Form.Item hasFeedback name="Date" label="Date" rules={[
+                    {
+                        required: true,
+                    },
+                ]} >
+                    <RangePicker showTime format="YYYY-MM-DD HH:mm" />
+                </Form.Item>
+                <Form.Item hasFeedback name="Description" label="Description">
+                    <TextArea rows={4} />
                 </Form.Item>
 
                 <Flex  justify="space-around" >
@@ -786,10 +801,10 @@ const GeneralForm= ({onFinish,initialvalue}) => {
                     )}
                 </Flex>
 
-             </Form >
+            </Form >
 
-    )
-}
+        )
+    }
     const TechForm= ({onFinish,initialvalue}) => {
 
         return (
@@ -835,7 +850,7 @@ const GeneralForm= ({onFinish,initialvalue}) => {
 
                 </Form.Item>
                 <Form.Item name="techniciens">
-                    <Table bordered columns={columns}  pagination={{ position: "bottomCenter" }} rowSelection={{...rowSelection, hideSelectAll:true}} dataSource={data} size="large"/>
+                    <Table bordered columns={columns}  rowSelection={{...rowSelection, hideSelectAll:true}} dataSource={data} size="large"/>
                 </Form.Item>
                 <Flex  justify="space-between" style={{marginLeft:"1px"
                 }} >
@@ -871,23 +886,25 @@ const GeneralForm= ({onFinish,initialvalue}) => {
         return (
             <Form  onFinish={onFinish}
                    initialValues={initialvalue}
-                  size="large"
-                  labelCol={{
-                      span: 4,
-                  }}
-                  wrapperCol={{
-                      span: 14,
-                  }}
-                  layout="horizontal"
-                  style={{
-                      maxWidth: 600,
-                  }}
+                   size="large"
+                   labelCol={{
+                       span: 4,
+                   }}
+                   wrapperCol={{
+                       span: 14,
+                   }}
+                   layout="horizontal"
+                   style={{
+                       maxWidth: 600,
+                   }}
             >
 
                 <Form.Item  name="vehicule"
-
                 >
-                        <Table bordered columns={columnss}  rowSelection={{...rowSelectionn, hideSelectAll:true}} dataSource={dataa} size="large"  />
+
+
+                    <Table bordered columns={columnss}  rowSelection={{...rowSelectionn,type: "radio", hideSelectAll:true}} dataSource={dataa} size="large"/>
+
 
                 </Form.Item>
 
@@ -988,9 +1005,9 @@ const GeneralForm= ({onFinish,initialvalue}) => {
                         <>
                             <Steps current={current}  items={items} />
                             <Flex justify="center" >
-                            <div style={{ marginTop:50 }} >
-                                {forms[current]}
-                            </div>
+                                <div style={{ marginTop:50 }} >
+                                    {forms[current]}
+                                </div>
                             </Flex>
 
                         </>
