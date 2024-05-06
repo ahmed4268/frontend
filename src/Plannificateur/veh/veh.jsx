@@ -29,7 +29,7 @@ const App = () => {
     useEffect(() => {
         const fetchveh = async () => {
 
-            const { data } = await axios.get('/vehicule', {
+            const { data } = await axios.get('https://opti-track-1.onrender.com/vehicule', {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },
@@ -179,7 +179,7 @@ const App = () => {
     };
     const handleDelete = async (key) => {
         try {
-            await axios.delete(`/vehicule/${key}`,{
+            await axios.delete(`https://opti-track-1.onrender.com/vehicule/${key}`,{
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },

@@ -50,7 +50,7 @@ const App = () => {
         };
         message.loading('creating technician...', 2.5)
 
-        axios.post("/tech", technician,{
+        axios.post("https://opti-track-1.onrender.com/tech", technician,{
             headers: {
                 Authorization: `Bearer ${Cookies.get('token')}`,
             },

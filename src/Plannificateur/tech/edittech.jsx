@@ -52,7 +52,7 @@ const App = () => {
         };
         message.loading('updating technician...', 1.5)
 
-        axios.patch(`/tech/${technicien.key}`, technician,{
+        axios.patch(`https://opti-track-1.onrender.com/tech/${technicien.key}`, technician,{
             headers: {
                 Authorization: `Bearer ${Cookies.get('token')}`,
             },

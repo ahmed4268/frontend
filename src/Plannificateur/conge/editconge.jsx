@@ -49,7 +49,7 @@ const App = () => {
             returnDate: dayjs(values.returnDate),
             type: values.type,
         }
-        axios.patch(`/conge/${congee.key}`, conge,{
+        axios.patch(`https://opti-track-1.onrender.com/conge/${congee.key}`, conge,{
             headers: {
                 Authorization: `Bearer ${Cookies.get('token')}`,
             },

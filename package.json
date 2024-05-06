@@ -2,7 +2,7 @@
   "name": "untitled",
   "version": "0.1.0",
   "private": true,
-
+  "proxy": "https://opti-track-1.onrender.com/",
   "dependencies": {
     "@ant-design/icons": "^4.8.2",
     "@coreui/coreui": "^4.3.2",

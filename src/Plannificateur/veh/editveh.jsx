@@ -54,7 +54,7 @@ const App = () => {
         };
         message.loading('updating vehicle...', 1.5)
 
-        axios.patch(`/vehicule/${veh.key}`, vehicle,{
+        axios.patch(`https://opti-track-1.onrender.com/vehicule/${veh.key}`, vehicle,{
             headers: {
                 Authorization: `Bearer ${Cookies.get('token')}`,
             },

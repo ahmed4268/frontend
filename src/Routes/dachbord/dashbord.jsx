@@ -65,7 +65,7 @@ const App = () => {
        useEffect(() => {
            const fetchOperations = async () => {
 
-                   const { data } = await axios.get('/operation/dashboard',{
+                   const { data } = await axios.get('https://opti-track-1.onrender.com/operation/dashboard',{
                        headers: {
                            Authorization: `Bearer ${Cookies.get('token')}`,
                        },
@@ -123,7 +123,7 @@ const handleedit = (key) => {
 
 };
 const handleDelete = async (key) => {
-    await axios.delete(`operation/op/${key}`,{
+    await axios.delete(`https://opti-track-1.onrender.com/operation/op/${key}`,{
         headers: {
             Authorization: `Bearer ${Cookies.get('token')}`,
         },
@@ -133,7 +133,7 @@ const handleDelete = async (key) => {
     message.success('Operation deleted');
 };
 const handleConfirm = async (key) => {
-    await axios.patch(`operation/${key}/complete`,null,{
+    await axios.patch(`https://opti-track-1.onrender.com/operation/${key}/complete`,null,{
         headers: {
             Authorization: `Bearer ${Cookies.get('token')}`,
         },

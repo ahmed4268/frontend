@@ -79,7 +79,7 @@ const App = () => {
 
     useEffect(() => {
         const fetchOperations = async () => {
-            const { data } = await axios.get('/operation/map',{
+            const { data } = await axios.get('https://opti-track-1.onrender.com/operation/map',{
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },

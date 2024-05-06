@@ -73,7 +73,7 @@ const App = () => {
     useEffect(() => {
         const fetchinfo = async () => {
 
-            const { data } = await axios.get(`/operation?user=${user}`,{
+            const { data } = await axios.get(`https://opti-track-1.onrender.com/operation?user=${user}`,{
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },

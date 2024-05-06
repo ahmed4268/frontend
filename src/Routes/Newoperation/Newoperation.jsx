@@ -106,7 +106,7 @@ console.log("techinfo",techinfo)
 
         const fetchtech = async () => {
 
-            const {data} = await axios.post('tech/availabletech', requestData,{
+            const {data} = await axios.post('https://opti-track-1.onrender.com/tech/availabletech', requestData,{
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },
@@ -134,7 +134,7 @@ console.log("techinfo",techinfo)
 
 
         const fetchveh = async () => {
-            const {data} = await axios.post('vehicule/availableveh', requestDataa,{
+            const {data} = await axios.post('https://opti-track-1.onrender.com/vehicule/availableveh', requestDataa,{
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },
@@ -161,7 +161,7 @@ console.log("techinfo",techinfo)
         }
         const fetchSites = async () => {
 
-            const {data} = await axios.get('site',{
+            const {data} = await axios.get('https://opti-track-1.onrender.com/site',{
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },
@@ -554,7 +554,7 @@ console.log("techinfo",techinfo)
             user: user._id,
         };
 message.loading('Creating operation...', 3)
-        await axios.post('operation', operation, {
+        await axios.post('https://opti-track-1.onrender.com/operation', operation, {
             headers: {
                 Authorization: `Bearer ${Cookies.get('token')}`,
             },

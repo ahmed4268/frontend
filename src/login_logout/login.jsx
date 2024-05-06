@@ -44,7 +44,7 @@ function Login() {
                 email: event.email,
                 password:event.password });
             console.log(response)
-
+console.log(response.data.status)
             if (response.data.status === "success") {
                 message.success('Login successful! Redirecting...')
                 const token = response.data.token;

@@ -79,7 +79,7 @@ const useredit=useRef(usertoedit)
         }
 
         try {
-            const response = await axios.post('/user', user, {
+            const response = await axios.post('https://opti-track-1.onrender.com/user', user, {
                     headers: {
                         Authorization: `Bearer ${Cookies.get('token')}`,
                     }

@@ -97,7 +97,7 @@ const App = () => {
 
         const fetchsite = async () => {
 
-            const { data } = await axios.get('/site',{
+            const { data } = await axios.get('https://opti-track-1.onrender.com/site',{
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },
@@ -216,7 +216,7 @@ const App = () => {
             })
                 .then(async response => {
                     console.log('Geofence created:', response.data);
-                    await axios.post('/site', {
+                    await axios.post('https://opti-track-1.onrender.com/site', {
                         name: values.name,
                         state: values.state,
                         city: values.city,
@@ -263,7 +263,7 @@ console.log('values',values)
             })
                 .then(response => {
                     console.log('Geofence updated:', response.data);
-                    axios.patch(`/site/${values.id}`, {
+                    axios.patch(`https://opti-track-1.onrender.com/site/${values.id}`, {
                         name: values.name,
                         state: values.state,
                         city: values.city,
@@ -466,7 +466,7 @@ console.log('values',values)
                                             onConfirm={async () => {
                                                 try {
                                                     await Promise.all([
-                                                        axios.delete(`/site/${item._id}`,{
+                                                        axios.delete(`https://opti-track-1.onrender.com/site/${item._id}`,{
                                                             headers: {
                                                                 Authorization: `Bearer ${Cookies.get('token')}`,
                                                             },

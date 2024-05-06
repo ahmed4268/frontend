@@ -68,7 +68,7 @@ const opref=useRef(Operation)
 
     useEffect(() => {
         const fetchOperations = async () => {
-            const { data } = await axios.get('operation/archive',{
+            const { data } = await axios.get('https://opti-track-1.onrender.com/operation/archive',{
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },
@@ -208,7 +208,7 @@ const opref=useRef(Operation)
             ),
     });
     const handleDelete = async (key) => {
-        await axios.delete(`operation/${key}/def`,{
+        await axios.delete(`https://opti-track-1.onrender.com/operation/${key}/def`,{
             headers: {
                 Authorization: `Bearer ${Cookies.get('token')}`,
             },

@@ -30,7 +30,7 @@ const App = () => {
     useEffect(() => {
         const fetchconge = async () => {
 
-            const { data } = await axios.get('/conge',{
+            const { data } = await axios.get('https://opti-track-1.onrender.com/conge',{
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },
@@ -167,7 +167,7 @@ const App = () => {
     };
     const handleDelete = async (key) => {
         try {
-            await axios.delete(`/conge/${key}`,{
+            await axios.delete(`https://opti-track-1.onrender.com/conge/${key}`,{
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },

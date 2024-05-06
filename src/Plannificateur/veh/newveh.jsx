@@ -50,7 +50,7 @@ const App = () => {
         };
         message.loading('creating vehicle...', 1.5)
 
-        axios.post("/vehicule", vehicule,{
+        axios.post("https://opti-track-1.onrender.com/vehicule", vehicule,{
             headers: {
                 Authorization: `Bearer ${Cookies.get('token')}`,
             },

@@ -117,7 +117,7 @@ const date2=dayjs(operationn.endTime)
 
         const fetchtech = async () => {
 
-            const {data} = await axios.post('tech/availabletech_update', requestData,{
+            const {data} = await axios.post('https://opti-track-1.onrender.com/tech/availabletech_update', requestData,{
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },
@@ -171,7 +171,7 @@ console.log(tech)
 
 
         const fetchveh = async () => {
-            const {data} = await axios.post('vehicule/availableveh_update', requestDataa,{
+            const {data} = await axios.post('https://opti-track-1.onrender.com/vehicule/availableveh_update', requestDataa,{
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },
@@ -198,7 +198,7 @@ console.log(tech)
         }
         const fetchSites = async () => {
 
-            const {data} = await axios.get('site',{
+            const {data} = await axios.get('https://opti-track-1.onrender.com/site',{
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },
@@ -571,7 +571,7 @@ console.log(tech)
         };
         message.loading('updating operation...', 3)
 
-        axios.patch(`operation/op/${operationn.key}`, operation,{
+        axios.patch(`https://opti-track-1.onrender.com/operation/op/${operationn.key}`, operation,{
             headers: {
                 Authorization: `Bearer ${Cookies.get('token')}`,
             },
