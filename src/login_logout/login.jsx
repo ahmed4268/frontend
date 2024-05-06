@@ -27,7 +27,7 @@ function Login() {
         }
 
         try {
-            const response = await axios.post('/user/forgotPassword', {email: email });
+            const response = await axios.post('https://opti-track-1.onrender.com/user/forgotPassword', {email: email });
 
             if (response.status === 200) {
                 message.success('Please check your email');
