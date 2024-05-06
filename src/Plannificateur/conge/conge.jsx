@@ -14,7 +14,6 @@ import {
     SearchOutlined
 } from "@ant-design/icons";
 
-import Tablee from "../../component/operation/operation";
 import Footerr from "../../component/footer/footer";
 import Highlighter from "react-highlight-words";
 import {useNavigate} from "react-router-dom";

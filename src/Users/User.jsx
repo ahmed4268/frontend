@@ -34,7 +34,6 @@ import {
 import instance from '../login_logout/axiosInstance';
 import * as XLSX from 'xlsx';
 
-import Tablee from "../component/operation/operation";
 import Footerr from "../component/footer/footer";
 import Highlighter from "react-highlight-words";
 import Cookies from "js-cookie";

@@ -37,7 +37,6 @@ import {
     ConfigProvider, Drawer, Divider, Table
 } from 'antd';
 import axios from "axios";
-import Tablee from "../../component/operation/operation";
 import Sidebar from "../../component/sidebar/sidebar"
 import Footerr from "../../component/footer/footer"
 import Navbar from "../../component/navbar/navbar"
