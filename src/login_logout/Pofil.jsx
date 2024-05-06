@@ -40,7 +40,7 @@ function Profile() {
 
     const handlePasswordChangeFormSubmit = async (values) => {
         try {
-            const response = await axios.patch('/user/updateMyPassword', {
+            const response = await axios.patch('https://opti-track-1.onrender.com/user/updateMyPassword', {
                 passwordCurrent: values.oldPassword,
                 password: values.newPassword,
             }, {
