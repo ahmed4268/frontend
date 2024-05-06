@@ -40,7 +40,7 @@ function Login() {
     };
     const handleSubmit = async (event) => {
         try {
-            const response = await axios.post('/user/login', {
+            const response = await axios.post('https://opti-track-1.onrender.com/user/login', {
                 email: event.email,
                 password:event.password });
             console.log(response)
