@@ -111,7 +111,7 @@ const useredit=useRef(usertoedit)
     useEffect(() => {
         const fetchuser = async () => {
 
-            const response = await axios.get('/user', {
+            const response = await axios.get('https://opti-track-1.onrender.com/user', {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 }}
