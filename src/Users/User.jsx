@@ -253,7 +253,7 @@ const useredit=useRef(usertoedit)
     };
     const handleDelete = async (key) => {
         try {
-            await axios.delete(`/user/${key}`,{
+            await axios.delete(`https://opti-track-1.onrender.com/user/${key}`,{
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 },
@@ -286,7 +286,7 @@ const useredit=useRef(usertoedit)
         console.log(`/user/${usertoedit.key}`)
         try {
             console.log(`/user/${usertoedit.key}`)
-            const response = await axios.patch(`/user/${usertoedit.key}`, user, {
+            const response = await axios.patch(`https://opti-track-1.onrender.com/user/${usertoedit.key}`, user, {
                 headers: {
                     Authorization: `Bearer ${Cookies.get('token')}`,
                 }
