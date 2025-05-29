@@ -7,7 +7,7 @@ import { setUser } from '../actions/cookieActions';
 import instance from './axiosInstance';
 import {Form, Input, Button, Row, Col, Checkbox, Space} from 'antd';
 // import 'antd/dist/antd.css';
-import  gif from './gitttt.gif';
+import  gif from './logogif.gif';
 import { message } from 'antd';
 
 function Login() {
