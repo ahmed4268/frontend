@@ -1,4 +1,4 @@
-#OptiTrack – Real-Time Field Operations Management
+OptiTrack – Real-Time Field Operations Management
 
 OptiTrack is a MERN-based web application developed during my Final Year Internship (PFE) at SOTETEL. The platform is designed to enhance field operations by enabling real-time tracking of technicians and vehicles, improving task planning, monitoring, and team coordination.
 
